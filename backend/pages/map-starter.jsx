@@ -19,25 +19,50 @@ export default function Home() {
         zoom: 8
         });
          
+        // const mapboxGeocoder = new MapboxGeocoder({
+        //     accessToken: mapboxgl.accessToken
+        // });
         const mapboxDirections = new MapboxDirections({
             accessToken: mapboxgl.accessToken
         });
         mapboxDirections.on('route', (route) => {
             console.log(route.route);
             console.log(route.route[0].distance + " meters");
-            console.log(mapboxDirections.getOrigin());
-            console.log(mapboxDirections.getDestination());
+            console.log("start at " + mapboxDirections.getOrigin().geometry.coordinates);
+            console.log("end at " + mapboxDirections.getDestination().geometry.coordinates);
+            // getCoordsName(mapboxDirections.getOrigin().geometry.coordinates,
+            //         mapboxDirections.getDestination().geometry.coordinates);
+            
         })
         mapboxDirections.on('profile', (profile) => {
-            console.log(profile);
-            
+            console.log("traveling via " + profile.profile);
         })
         map.addControl(
             mapboxDirections,
             'top-left'
         );
 
+        var getCoordsName = function(firstCoords, secondCoords) {
+            // if(firstCoords === undefined || secondCoords === undefined) {
+            //     return 0;
+            // }
+            var xhr = new XMLHttpRequest();
+            var URL = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + 
+                firstCoords[0] + "," + secondCoords[1] + ";" +
+                secondCoords[0] + "," + secondCoords[1] + ".json?access_token=" +
+                mapboxgl.accessToken;
+            
+            xhr.open('GET', URL);
+            xhr.responseType = 'json';
 
+            xhr.onload = function() {
+                let responseObj = xhr.response;
+                console.log(responseObj);
+                // console.log(responseObj.features[0].place_name); // Hello, world!
+            };
+            xhr.send();
+
+        }
     },
     []);
     return (
