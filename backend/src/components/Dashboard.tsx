@@ -98,6 +98,7 @@ function DashboardContent() {
     setOpen(!open)
   }
 
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -171,7 +172,6 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
                 <Paper
                   sx={{
@@ -181,7 +181,7 @@ function DashboardContent() {
                     height: 240,
                   }}
                 >
-                  {/* <Chart /> */}
+                  <Chart />
                 </Paper>
               </Grid>
               {/* Recent Deposits */}

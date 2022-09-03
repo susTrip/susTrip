@@ -51,7 +51,7 @@ export default function App() {
       destinationValue,
       distanceValue,
       modeValue,
-      emissionValue
+      emissionValue,
     )
   }
   return (

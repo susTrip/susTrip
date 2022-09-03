@@ -13,11 +13,25 @@ function preventDefault(event: React.MouseEvent) {
   event.preventDefault();
 }
 
-export default function Orders() {
+
+export function calcSum() {
   const trips = useQuery("trip") || []
+  const emissionArray: number[] = trips.map((t) => (t.emission))
+  let sum = 0;
+  emissionArray.forEach((element) => {
+    sum += Number(element);
+  });
+  if (sum != 0) {
+    return sum;
+  }
+}
+
+export default function Trips() {
+  const trips = useQuery("trip") || []
+  
   return (
     <React.Fragment>
-      <Title>Recent Orders</Title>
+      <Title>Recent Trips</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -39,7 +53,7 @@ export default function Orders() {
               <TableCell>{t.destination}</TableCell>
               <TableCell>{`${t.distance} km`}</TableCell>
               <TableCell>{t.mode}</TableCell>
-              <TableCell align="right">{`${t.emission} kt`}</TableCell>
+              <TableCell align="right">{`${t.emission} g`}</TableCell>
             </TableRow>
           ))}
         </TableBody>
