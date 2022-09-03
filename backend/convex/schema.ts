@@ -9,5 +9,11 @@ export default defineSchema({
   counters: defineTable({
     name: s.string(),
     counter: s.number(),
+  }),
+  trip: defineTable({
+    from: s.string(),
+    to: s.string(),
+    distance: s.number(),
+    mode: s.string(),
   })
 });
