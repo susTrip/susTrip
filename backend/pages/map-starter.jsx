@@ -19,10 +19,21 @@ export default function Home() {
         zoom: 8
         });
          
+        const mapboxDirections = new MapboxDirections({
+            accessToken: mapboxgl.accessToken
+        });
+        mapboxDirections.on('route', (route) => {
+            console.log(route.route);
+            console.log(route.route[0].distance + " meters");
+            console.log(mapboxDirections.getOrigin());
+            console.log(mapboxDirections.getDestination());
+        })
+        mapboxDirections.on('profile', (profile) => {
+            console.log(profile);
+            
+        })
         map.addControl(
-            new MapboxDirections({
-                accessToken: mapboxgl.accessToken
-            }),
+            mapboxDirections,
             'top-left'
         );
 

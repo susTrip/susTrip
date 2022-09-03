@@ -10,6 +10,7 @@ export default function Document() {
             <body>
             <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js" />
             <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css" type="text/css"></link>
+            
                 <Main />
                 <NextScript />
             </body>
