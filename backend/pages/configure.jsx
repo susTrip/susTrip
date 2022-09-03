@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 import {
   Card,
   CardContent,
@@ -18,30 +18,41 @@ import { borderRadius } from '@mui/system'
 
 const trip = {
   id: 0,
-  date: "",
-  title: "",
-  origin: "",
-  destination: "",
+  date: '',
+  title: '',
+  origin: '',
+  destination: '',
   distance: 0,
-  mode: "",
+  mode: '',
   emission: 0,
-};
+}
 
 export default function App() {
   const [idValue, setIdValue] = React.useState(trip.id)
   const [dateValue, setDateValue] = React.useState(trip.date)
   const [titleValue, setTitleValue] = React.useState(trip.title)
   const [originValue, setOriginValue] = React.useState(trip.origin)
-  const [destinationValue, setDestinationValue] = React.useState(trip.destination)
+  const [destinationValue, setDestinationValue] = React.useState(
+    trip.destination
+  )
   const [distanceValue, setDistanceValue] = React.useState(trip.distance)
   const [modeValue, setModeValue] = React.useState(trip.mode)
   const [emissionValue, setEmissionValue] = React.useState(trip.emission)
 
-  const submitTrip = useMutation("submitTrip")
-  const trips = useQuery("trip") || []
+  const submitTrip = useMutation('submitTrip')
+  const trips = useQuery('trip') || []
   function handleSubmitTrip() {
-    
-    submitTrip(trip.logid, trip.date, trip.title, trip.origin, trip.destination, trip.distance, trip.mode, trip.emission)
+    console.log(trip)
+    submitTrip(
+      idValue,
+      dateValue,
+      titleValue,
+      originValue,
+      destinationValue,
+      distanceValue,
+      modeValue,
+      emissionValue
+    )
   }
   return (
     <Container>
@@ -86,62 +97,54 @@ export default function App() {
         type="text"
         value={idValue}
         id="logid"
-        defaultValue={'id'}
         onChange={(e) => setIdValue(e.currentTarget.value)}
       />
       <input
         type="text"
         value={dateValue}
         id="date"
-        defaultValue={'date'}
         onChange={(e) => setDateValue(e.currentTarget.value)}
       />
       <input
         type="text"
         value={titleValue}
         id="title"
-        defaultValue={'title'}
         onChange={(e) => setTitleValue(e.currentTarget.value)}
       />
       <input
         type="text"
         value={originValue}
         id="origin"
-        defaultValue={'origin'}
         onChange={(e) => setOriginValue(e.currentTarget.value)}
       />
       <input
         type="text"
         value={destinationValue}
         id="destination"
-        defaultValue={'destination'}
         onChange={(e) => setDestinationValue(e.currentTarget.value)}
       />
       <input
         type="text"
         value={distanceValue}
         id="distance"
-        defaultValue={'distance'}
         onChange={(e) => setDistanceValue(e.currentTarget.value)}
       />
       <input
         type="text"
         value={modeValue}
         id="mode"
-        defaultValue={'mode'}
         onChange={(e) => setModeValue(e.currentTarget.value)}
       />
       <input
         type="text"
         value={emissionValue}
         id="emission"
-        defaultValue={'emission'}
         onChange={(e) => setEmissionValue(e.currentTarget.value)}
       />
 
-      <input type="submit" onClick={handleSubmitTrip}>
-        Submit
-      </input>
+      <Button onClick={handleSubmitTrip} variant="text">
+        Text
+      </Button>
       <ul>
         {trips.map((t) => (
           <div>{t.distance}</div>
@@ -158,10 +161,7 @@ const transOptions = [
   { label: 'Amtrak' },
   { label: 'Plane' },
   { label: 'Legs' },
-  { label: 'Horse'},
+  { label: 'Horse' },
 ]
 
-const unitOptions = [
-  { label: 'miles' }, 
-  { label: 'kilometers' },
-]
+const unitOptions = [{ label: 'miles' }, { label: 'kilometers' }]

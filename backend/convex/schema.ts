@@ -12,8 +12,9 @@ export default defineSchema({
   }),
   trip: defineTable({
     id: s.number(),
-    date: s.string(),
     name: s.string(),
+    date: s.string(),
+    title: s.string(),
     origin: s.string(),
     destination: s.string(),
     distance: s.number(),
