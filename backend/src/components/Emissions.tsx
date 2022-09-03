@@ -12,7 +12,7 @@ export default function Emissions() {
     <React.Fragment>
       <Title>Recent Emission</Title>
       <Typography component="p" variant="h4">
-        3,024.00 kt
+        3,024.00 grams
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
         on 4 September, 2022

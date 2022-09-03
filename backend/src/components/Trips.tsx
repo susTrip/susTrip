@@ -6,39 +6,15 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
+import { useQuery, useMutation } from '../../convex/_generated/react'
 
-// Generate Order Data
-function createData(
-  id: number,
-  date: string,
-  name: string,
-  origin: string,
-  destination: string,
-  distance: number,
-  mode: string,
-  emission: number,
-) {
-  return { id, date, name, origin, destination, distance, mode, emission };
-}
-
-const rows = [
-  createData(
-    0,
-    '16 Mar, 2019',
-    'Roadtrip 101',
-    'Philadelphia, PA',
-    'New York, NY',
-    312.44,
-    'Amtrak',
-    1234,
-  ),
-];
 
 function preventDefault(event: React.MouseEvent) {
   event.preventDefault();
 }
 
 export default function Orders() {
+  const trips = useQuery("trip") || []
   return (
     <React.Fragment>
       <Title>Recent Orders</Title>
@@ -55,15 +31,15 @@ export default function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.origin}</TableCell>
-              <TableCell>{row.destination}</TableCell>
-              <TableCell>{`${row.distance} km`}</TableCell>
-              <TableCell>{row.mode}</TableCell>
-              <TableCell align="right">{`${row.emission} kt`}</TableCell>
+          {trips.map((t) => (
+            <TableRow key={t.id}>
+              <TableCell>{t.date}</TableCell>
+              <TableCell>{t.title}</TableCell>
+              <TableCell>{t.origin}</TableCell>
+              <TableCell>{t.destination}</TableCell>
+              <TableCell>{`${t.distance} km`}</TableCell>
+              <TableCell>{t.mode}</TableCell>
+              <TableCell align="right">{`${t.emission} kt`}</TableCell>
             </TableRow>
           ))}
         </TableBody>
