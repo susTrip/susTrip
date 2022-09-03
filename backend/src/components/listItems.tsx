@@ -3,6 +3,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
+import Link from '@mui/material/Link';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import MapIcon from '@mui/icons-material/Map';
 import SettingsIcon from '@mui/icons-material/Settings'
@@ -17,13 +18,13 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton href="/map-stater">
       <ListItemIcon>
         <MapIcon />
-      </ListItemIcon>
+      </ListItemIcon >
       <ListItemText primary="Map" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton href="/configure">
       <ListItemIcon>
         <SettingsIcon />
       </ListItemIcon>
