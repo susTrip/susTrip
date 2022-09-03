@@ -3,8 +3,9 @@ import { defineSchema, defineTable, s } from "convex/schema";
 
 export default defineSchema({
   messages: defineTable({
-    author: s.string(),
     body: s.string(),
+    channel: s.id("channels"),
+    user: s.id("users"),
   }),
   counters: defineTable({
     name: s.string(),
@@ -15,5 +16,12 @@ export default defineSchema({
     to: s.string(),
     distance: s.number(),
     mode: s.string(),
-  })
+  }),
+  users: defineTable({
+    name: s.string(),
+    tokenIdentifier: s.string(),
+  }),
+  channels: defineTable({
+    name: s.string(),
+  }),
 });

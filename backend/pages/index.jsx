@@ -2,6 +2,42 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
+import { useAuth0 } from "@auth0/auth0-react";
+
+export function Login() {
+  const { isLoading, loginWithRedirect } = useAuth0();
+  if (isLoading) {
+    return <button className="btn btn-primary">Loading...</button>;
+  }
+  return (
+    <main className="py-4">
+      <h1 className="text-center">Convex Chat</h1>
+      <div className="text-center">
+        <span>
+          <button className="btn btn-primary" onClick={loginWithRedirect}>
+            Log in
+          </button>
+        </span>
+      </div>
+    </main>
+  );
+}
+
+function Logout() {
+  const { logout, user } = useAuth0();
+  return (
+    <div>
+      {/* We know this component only renders if the user is logged in. */}
+      <p>Logged in{user.name ? ` as ${user.name}` : ""}</p>
+      <button
+        className="btn btn-primary"
+        onClick={() => logout({ returnTo: window.location.origin })}
+      >
+        Log out
+      </button>
+    </div>
+  );
+}
 
 const Home = () => {
   return (
@@ -33,7 +69,12 @@ const Home = () => {
               <a>configure</a>
             </Link>
           </li>
+          
         </ul>
+        <body>
+              <div id="root"></div>
+              <script type="module" src="../src/main.tsx"></script>
+        </body>
       </main>
 
       <footer className={styles.footer}>
