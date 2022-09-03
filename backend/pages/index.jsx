@@ -28,6 +28,11 @@ const Home = () => {
               <a>counter</a>
             </Link>
           </li>
+          <li>
+            <Link href="/configure">
+              <a>configure</a>
+            </Link>
+          </li>
         </ul>
       </main>
 
