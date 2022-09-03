@@ -9,6 +9,7 @@ import {
   Autocomplete,
   TextField,
   Button,
+  touchRippleClasses,
 } from '@mui/material'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -17,6 +18,11 @@ import { useCallback } from 'react'
 import { borderRadius } from '@mui/system'
 
 export default function App() {
+  const submitTrip = useMutation("submitTrip")
+  const trips = useQuery("trip") || []
+  function handleSubmitTrip() {
+    submitTrip("here", "there", 19, "leg")
+  }
   return (
     <Container>
       <Grid>
@@ -60,7 +66,13 @@ export default function App() {
           </Box>
         </Card>
       </Grid>
+      <input type="text"/> 
+      <button onClick={handleSubmitTrip}>Submit</button>
+      <ul>
+        {trips.map(t => <div>{t.distance}</div>)}
+      </ul>
     </Container>
+    
   )
 }
 

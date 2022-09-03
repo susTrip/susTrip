@@ -13,6 +13,8 @@ import type getCounter from "../getCounter";
 import type incrementCounter from "../incrementCounter";
 import type listMessages from "../listMessages";
 import type sendMessage from "../sendMessage";
+import type submitTrip from "../submitTrip";
+import type trip from "../trip";
 import type { OptimisticLocalStore as GenericOptimisticLocalStore } from "convex/browser";
 import type { ClientMutation, ClientQuery } from "convex/server";
 
@@ -29,10 +31,12 @@ export type ConvexAPI = {
   queries: {
     getCounter: ClientQuery<typeof getCounter>;
     listMessages: ClientQuery<typeof listMessages>;
+    trip: ClientQuery<typeof trip>;
   };
   mutations: {
     incrementCounter: ClientMutation<typeof incrementCounter>;
     sendMessage: ClientMutation<typeof sendMessage>;
+    submitTrip: ClientMutation<typeof submitTrip>;
   };
 };
 
