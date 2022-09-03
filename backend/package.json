@@ -12,9 +12,11 @@
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.3",
     "convex": "latest",
+    "mapbox-gl": "^1.0.0",
     "next": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-map-gl": "^7.0.19",
     "recharts": "^2.1.13"
   },
   "devDependencies": {
