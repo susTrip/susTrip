@@ -297,7 +297,7 @@ export default function Home() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Your susTrip Dashboard
+              Your susTrip Map
             </Typography>
             <Logout />
             <IconButton color="inherit">
@@ -329,7 +329,6 @@ export default function Home() {
         </Drawer>
 
         <Head>
-          <title>react-map-gl example</title>
         </Head>
 
         <Box>
