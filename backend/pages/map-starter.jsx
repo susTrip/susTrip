@@ -13,6 +13,7 @@ import {
   Typography,
   Box,
   Paper,
+  Button,
 } from '@mui/material/'
 import MuiDrawer from '@mui/material/Drawer'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
@@ -25,6 +26,7 @@ import { mainListItems, secondaryListItems } from '../src/components/listItems'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { useEffect } from 'react'
 import { useRef } from 'react'
+import { useQuery, useMutation } from '../convex/_generated/react'
 
 const MAPBOX_TOKEN =
   'pk.eyJ1Ijoic3VzdHJpcCIsImEiOiJjbDdtMDMzdHUwOXd2M3ZwOG9hN29heXV5In0.Y3_7dFxQF5xjS7WuhtdxiQ'
@@ -76,7 +78,36 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme()
 
+
+
+function calculateCo2ByGram(mode, distance) {
+  // const TransportMode = {
+  //   "mapbox/driving-traffic" : 404,
+  //   "Bus" : 150,
+  //   "mapbox/driving" : 300,
+  //   "SEPTA" : 100,
+  //   "Amtrak" : 200,
+  //   "Plane" : 500,
+  //   "mapbox/walking" : 0,
+  //   "Horse" : 50
+  // }
+  var rate;
+  if (mode=="mapbox/driving-traffic") rate = 404;
+  else if (mode == "mapbox/driving") rate = 300;
+  else if (mode == "mapbox/walking") rate = 0;
+  console.log(rate)
+  if (rate != undefined) {
+    return rate * distance;
+  }
+  return -1;
+}
+
 export default function Home() {
+
+  var modeTransport = "mapbox/driving-traffic"
+
+  const submitTrip = useMutation('submitTrip')
+  const trips = useQuery('trip') || []
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
@@ -98,21 +129,63 @@ export default function Home() {
     const mapboxDirections = new MapboxDirections({
       accessToken: mapboxgl.accessToken,
     })
+
+    // enum TransportMode {
+    //   Car,
+    //   Bus,
+    //   SEPTA,
+    //   Amtrak,
+    //   Plane,
+    //   Legs,
+    //   Horse
+    // }
+
+    
+    
+    // var TransportModeEmission = new Map<TransportMode, number>([
+    //   [TransportMode.Car, 404],
+    //   [TransportMode.Bus, 150],
+    //   [TransportMode.SEPTA, 100],
+    //   [TransportMode.Amtrak, 200],
+    //   [TransportMode.Plane, 500],
+    //   [TransportMode.Legs, 0],
+    //   [TransportMode.Horse, 50]
+    // ]);
+    
+    
+
+    mapboxDirections.on('profile', (profile) => {
+      modeTransport = profile.profile
+      console.log('traveling via ' + profile.profile)
+    })
+
     mapboxDirections.on('route', (route) => {
       console.log(route.route)
       console.log(route.route[0].distance + ' meters')
       console.log(
-        'start at ' + mapboxDirections.getOrigin().geometry.coordinates
+        'start at ' + mapboxDirections.getOrigin()
       )
       console.log(
         'end at ' + mapboxDirections.getDestination().geometry.coordinates
       )
+      var date = new Date()
+      console.log(modeTransport)
+      var emission = calculateCo2ByGram(modeTransport, route.route[0].distance)
+      submitTrip(
+        0,
+        date.toDateString(),
+        "titleValue",
+        mapboxDirections.getOrigin().geometry.coordinates,
+        mapboxDirections.getDestination().geometry.coordinates,
+        route.route[0].distance,
+        modeTransport,
+        emission,
+      )
+      
       // getCoordsName(mapboxDirections.getOrigin().geometry.coordinates,
       //         mapboxDirections.getDestination().geometry.coordinates);
     })
-    mapboxDirections.on('profile', (profile) => {
-      console.log('traveling via ' + profile.profile)
-    })
+    
     map.addControl(mapboxDirections, 'top-left')
 
     var getCoordsName = function (firstCoords, secondCoords) {
