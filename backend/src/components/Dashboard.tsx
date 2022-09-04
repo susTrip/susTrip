@@ -7,6 +7,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import List from '@mui/material/List'
 import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Badge from '@mui/material/Badge'
@@ -22,6 +23,8 @@ import Chart from './Charts'
 import Emissions from './Emissions'
 import Trips from './Trips'
 import dynamic from 'next/dynamic'
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 const DynamicShape = dynamic(() => import('../components/Charts'), {
   ssr: false,
@@ -104,7 +107,20 @@ function DashboardContent() {
     setOpen(!open)
   }
 
-
+function Logout() {
+  const { logout, user } = useAuth0();
+  return (
+    <Grid>
+      {/* We know this component only renders if the user is logged in. */}
+      <Typography>Logged in{user.name ? ` as ${user.name}` : ""}</Typography>
+      <Button size="small" color="secondary" variant="contained"
+        onClick={() => logout({ returnTo: window.location.origin })}
+      >
+        Log out
+      </Button>
+    </Grid>
+  );
+}
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -133,9 +149,10 @@ function DashboardContent() {
               color="inherit"
               noWrap
               sx={{ flexGrow: 1 }}
-            >
+              >
               Your susTrip Dashboard
             </Typography>
+              <Logout/>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
