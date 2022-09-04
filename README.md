@@ -1,3 +1,5 @@
+**SusTrip** is a web application that records users' past trip information and respective carbon footprints. It aims to help users think more carefully about the mode of transportation they wish to take.
+
 ## Inspiration
 
 We thought of the idea for susTrip when we noticed that Google Flights has a metric that displays the amount of CO2 produced for each trip, but Google Maps does not have that feature. We think that producing a feature that let travelers know the amount of CO2 they produced based on their modes of transportation would help them make more educated choices when it comes to traveling. Thus, aiming to contribute to the cause of sustainability and saving the environment.
