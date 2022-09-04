@@ -17,7 +17,7 @@ export default function Emissions() {
       {`${emission} g`}
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
-        on 4 September, 2022
+        on 3 September, 2022
       </Typography>
       <div>
         <Link color="primary" href="#" onClick={preventDefault}>
