@@ -3,5 +3,18 @@
   "team": "susTrip",
   "prodUrl": "https://beloved-kookabura-540.convex.cloud",
   "functions": "convex/",
-  "authInfo": []
+  "authInfo": [
+    {
+      "domain": "https://dev-5fws2b3t.us.auth0.com",
+      "applicationID": "Gjk1jlUYRJxONM2nzVL2Hu5f46PlKeie"
+    },
+    {
+      "domain": "https://dev-5fws2b3t.us.auth0.com",
+      "applicationID": "Gjk1jlUYRJxONM2nzVL2Hu5f46PlKeie"
+    },
+    {
+      "domain": "https://dev-5fws2b3t.us.auth0.com",
+      "applicationID": "Gjk1jlUYRJxONM2nzVL2Hu5f46PlKeie"
+    }
+  ]
 }

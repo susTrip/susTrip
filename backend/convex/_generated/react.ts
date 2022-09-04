@@ -9,10 +9,12 @@
  * @module
  */
 
+import type addChannel from "../addChannel";
 import type getCounter from "../getCounter";
 import type incrementCounter from "../incrementCounter";
 import type listMessages from "../listMessages";
 import type sendMessage from "../sendMessage";
+import type storeUser from "../storeUser";
 import type submitTrip from "../submitTrip";
 import type trip from "../trip";
 import type { OptimisticLocalStore as GenericOptimisticLocalStore } from "convex/browser";
@@ -34,8 +36,10 @@ export type ConvexAPI = {
     trip: ClientQuery<typeof trip>;
   };
   mutations: {
+    addChannel: ClientMutation<typeof addChannel>;
     incrementCounter: ClientMutation<typeof incrementCounter>;
     sendMessage: ClientMutation<typeof sendMessage>;
+    storeUser: ClientMutation<typeof storeUser>;
     submitTrip: ClientMutation<typeof submitTrip>;
   };
 };
