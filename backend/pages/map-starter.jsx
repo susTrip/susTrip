@@ -12,6 +12,7 @@ import {
   Link,
   Typography,
   Box,
+  Paper,
 } from '@mui/material/'
 import MuiDrawer from '@mui/material/Drawer'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
@@ -220,7 +221,7 @@ export default function Home() {
           </div>
           <Grid sx={{ flexGrow: 1 }} container spacing={2}>
             <Grid item xs={12}>
-              <Grid container justifyContent="center" spacing={spacing}>
+              <Grid container justifyContent="center">
                 {[0, 1, 2].map((value) => (
                   <Grid key={value} item>
                     <Paper

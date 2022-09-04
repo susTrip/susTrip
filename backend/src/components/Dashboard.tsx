@@ -21,6 +21,12 @@ import { mainListItems, secondaryListItems } from './listItems'
 import Chart from './Charts'
 import Emissions from './Emissions'
 import Trips from './Trips'
+import dynamic from 'next/dynamic'
+
+const DynamicShape = dynamic(() => import('../components/Charts'), {
+  ssr: false,
+})
+
 
 function Copyright(props: any) {
   return (
@@ -181,7 +187,7 @@ function DashboardContent() {
                     height: 240,
                   }}
                 >
-                  <Chart />
+                  <DynamicShape />
                 </Paper>
               </Grid>
               {/* Recent Deposits */}
