@@ -13,8 +13,8 @@ export default function Emissions() {
   return (
     <React.Fragment>
       <Title>Monthly Emission</Title>
-      <Typography component="p" variant="h4">
-      {`${emission} Kg`}
+      <Typography component="p" variant="h5">
+      {`${emission} Kg CO2e`}
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
         on 3 September, 2022

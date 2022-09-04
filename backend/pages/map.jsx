@@ -129,7 +129,7 @@ function calculateCo2ByGram(mode, distance) {
   else if (mode == 'mapbox/walking') rate = 0
   console.log(rate)
   if (rate != undefined) {
-    return rate * distance
+    return (rate * distance)
   }
   return -1
 }
@@ -204,9 +204,10 @@ export default function Home() {
 
     mapboxDirections.on('route', (route) => {
       console.log(modeTransport)
+      var distInMile = parseFloat(route.route[0].distance) * 0.000621371
       var curEmission = calculateCo2ByGram(
         modeTransport,
-        route.route[0].distance
+        distInMile
       )
       var curOrigin = document.querySelector(
         "input[placeholder='Choose a starting place']"
@@ -414,7 +415,7 @@ export default function Home() {
                   color="text.secondary"
                   gutterBottom
                 >
-                  Total Carbon emmitted: {emission}
+                  Total Carbon emmitted (grams CO2e): {emission}
                 </Typography>
                 {/* <Typography variant="body2">
           well meaning and kindly.

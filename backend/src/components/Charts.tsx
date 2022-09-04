@@ -11,10 +11,10 @@ function createData(time: string, amount?: number) {
 }
 const data = [
   createData('0', 0),
-  createData('3rd', 132),
-  createData('6th', undefined),
-  createData('9th', undefined),
-  createData('12th', undefined),
+  createData('3rd', 45),
+  createData('6th', 90),
+  createData('9th', 102),
+  createData('12th', 130),
   createData('15th', undefined),
   createData('18th', undefined),
   createData('21th', undefined),
