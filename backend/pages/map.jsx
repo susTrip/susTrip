@@ -34,11 +34,22 @@ import { useRef } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useQuery, useMutation } from '../convex/_generated/react'
 
-
 const MAPBOX_TOKEN =
   'pk.eyJ1Ijoic3VzdHJpcCIsImEiOiJjbDdtMDMzdHUwOXd2M3ZwOG9hN29heXV5In0.Y3_7dFxQF5xjS7WuhtdxiQ'
 const drawerWidth = 240
-
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#AFE3C0',
+      main: '#688B58',
+      dark: '#90C290',
+    },
+    secondary: {
+      main: "#8963BA",
+      dark: "#54428E"
+    }
+  }
+});
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -83,7 +94,6 @@ const Drawer = styled(MuiDrawer, {
   },
 }))
 
-const mdTheme = createTheme()
 
 function Logout() {
   const { logout } = useAuth0()
@@ -126,7 +136,12 @@ function calculateCo2ByGram(mode, distance) {
 
 export default function Home() {
   const [myTrip, setTrip] = React.useState('Your Carbon Free Trip')
-  const [origin, setOrigin] = React.useState('')
+  const [origin, setOrigin] = React.useState('Your Trip Origin')
+  const [destination, setDestination] = React.useState('Your Trip Destination')
+  const [mode, setMode] = React.useState('Your Transpotation')
+  const [distance, setDistance] = React.useState(0)
+  const [emission, setEmission] = React.useState(0)
+
   var modeTransport = 'mapbox/driving-traffic'
 
   const submitTrip = useMutation('submitTrip')
@@ -173,32 +188,37 @@ export default function Home() {
     //   [TransportMode.Legs, 0],
     //   [TransportMode.Horse, 50]
     // ]);
-
+    
     mapboxDirections.on('profile', (profile) => {
       modeTransport = profile.profile
+      const transMap = {
+        'mapbox/driving-traffic': 'Car',
+        'mapbox/driving': 'Car',
+        'mapbox/cycling': 'Cycle',
+        'mapbox/walking': 'Walk',
+      }
+      setMode(transMap[modeTransport])
+
       console.log('traveling via ' + profile.profile)
     })
 
     mapboxDirections.on('route', (route) => {
-      console.log(route.route)
-      console.log(route.route[0].distance + ' meters')
-      console.log('start at ' + mapboxDirections.getOrigin())
-      console.log(
-        'end at ' + mapboxDirections.getDestination().geometry.coordinates
-      )
-      var date = new Date()
       console.log(modeTransport)
-      var emission = calculateCo2ByGram(modeTransport, route.route[0].distance)
-      submitTrip(
-        0,
-        date.toDateString(),
-        'titleValue',
-        mapboxDirections.getOrigin().geometry.coordinates,
-        mapboxDirections.getDestination().geometry.coordinates,
-        route.route[0].distance,
+      var curEmission = calculateCo2ByGram(
         modeTransport,
-        emission
+        route.route[0].distance
       )
+      var curOrigin = document.querySelector(
+        "input[placeholder='Choose a starting place']"
+      )
+      var curDestination = document.querySelector(
+        "input[placeholder='Choose destination']"
+      )
+      setOrigin(curOrigin.value)
+      setDestination(curDestination.value)
+      var dist = parseFloat(route.route[0].distance) * 0.000621371
+      setDistance(Number(dist.toFixed(2)))
+      setEmission(Number(curEmission.toFixed(2)))
 
       // getCoordsName(mapboxDirections.getOrigin().geometry.coordinates,
       //         mapboxDirections.getDestination().geometry.coordinates);
@@ -234,9 +254,21 @@ export default function Home() {
       xhr.send()
     }
   }, [])
-
+  const date = new Date()
+  function handleSubmitTrip() {
+    submitTrip(
+      0,
+      date.toDateString(),
+      myTrip,
+      origin,
+      destination,
+      distance,
+      mode,
+      emission
+    )
+  }
   return (
-    <ThemeProvider theme={mdTheme}>
+    <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
@@ -320,7 +352,7 @@ export default function Home() {
             p: 2,
             display: 'flex',
             flexDirection: 'row',
-            height: 260,
+            height: 300,
             width: 1400,
           }}
         >
@@ -347,14 +379,14 @@ export default function Home() {
                   color="text.secondary"
                   gutterBottom
                 >
-                  Destination:
+                  Destination: {destination}
                 </Typography>
                 <Typography
                   sx={{ fontSize: 16, paddingTop: 2 }}
                   color="text.secondary"
                   gutterBottom
                 >
-                  Mode of Travel:
+                  Mode of Travel: {mode}
                 </Typography>
                 {/* <Typography variant="body2">
           well meaning and kindly.
@@ -364,7 +396,7 @@ export default function Home() {
               </CardContent>
             </Box>
           </Grid>
-          <Grid sx={{ paddingLeft: 30 }}>
+          <Grid sx={{ paddingLeft: 30, paddingBottom: 2 }}>
             <Box maxWidth={500} variant="outlined">
               <CardContent>
                 <Typography variant="h4" component="div" gutterBottom>
@@ -375,14 +407,14 @@ export default function Home() {
                   color="text.secondary"
                   gutterBottom
                 >
-                  Total Distance:
+                  Total Distance (miles): {distance}
                 </Typography>
                 <Typography
                   sx={{ fontSize: 18 }}
                   color="text.secondary"
                   gutterBottom
                 >
-                  Total Carbon emmitted:
+                  Total Carbon emmitted: {emission}
                 </Typography>
                 {/* <Typography variant="body2">
           well meaning and kindly.
@@ -391,7 +423,9 @@ export default function Home() {
         </Typography> */}
               </CardContent>
               <CardActions>
-                <Button size="small">Save Trip</Button>
+                <Button size="small" onClick={handleSubmitTrip}>
+                  Save Trip
+                </Button>
               </CardActions>
             </Box>
           </Grid>

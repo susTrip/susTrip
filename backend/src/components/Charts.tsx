@@ -2,15 +2,16 @@ import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import Title from './Title';
+import { calcSum } from './Trips'
+
 
 // Generate Sales Data
 function createData(time: string, amount?: number) {
   return { time, amount };
 }
-
 const data = [
   createData('0', 0),
-  createData('3rd', 13690),
+  createData('3rd', 132),
   createData('6th', undefined),
   createData('9th', undefined),
   createData('12th', undefined),
@@ -20,10 +21,11 @@ const data = [
   createData('24th', undefined),
   createData('27th', undefined),
   createData('30th', undefined),
-
+  
 ];
 
 export default function Chart() {
+
   const theme = useTheme();
 
   return (
@@ -57,7 +59,7 @@ export default function Chart() {
                 ...theme.typography.body1,
               }}
             >
-              Grams (g)
+              Kilo Grams (Kg)
             </Label>
           </YAxis>
           <Line

@@ -26,7 +26,19 @@ import dynamic from 'next/dynamic'
 import { useAuth0 } from "@auth0/auth0-react";
 import Logout from "../../pages/index"
 
-
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#AFE3C0',
+      main: '#688B58',
+      dark: '#90C290',
+    },
+    secondary: {
+      main: "#8963BA",
+      dark: "#54428E"
+    }
+  }
+});
 const DynamicShape = dynamic(() => import('../components/Charts'), {
   ssr: false,
 })
@@ -100,7 +112,6 @@ const Drawer = styled(MuiDrawer, {
   },
 }))
 
-const mdTheme = createTheme()
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true)
@@ -122,7 +133,7 @@ function Logout() {
   );
 }
   return (
-    <ThemeProvider theme={mdTheme}>
+    <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>

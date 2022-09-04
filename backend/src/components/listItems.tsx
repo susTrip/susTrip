@@ -18,7 +18,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
-    <ListItemButton href="/map-starter">
+    <ListItemButton href="/map">
       <ListItemIcon>
         <MapIcon />
       </ListItemIcon >

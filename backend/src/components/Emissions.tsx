@@ -14,7 +14,7 @@ export default function Emissions() {
     <React.Fragment>
       <Title>Monthly Emission</Title>
       <Typography component="p" variant="h4">
-      {`${emission} g`}
+      {`${emission} Kg`}
       </Typography>
       <Typography color="text.secondary" sx={{ flex: 1 }}>
         on 3 September, 2022

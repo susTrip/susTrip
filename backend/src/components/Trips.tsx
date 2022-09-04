@@ -22,7 +22,8 @@ export function calcSum() {
     sum += Number(element);
   });
   if (sum != 0) {
-    return sum;
+    sum = sum / 1000
+    return Number(sum.toFixed(2));
   }
 }
 
