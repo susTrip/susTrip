@@ -1,3 +1,5 @@
+# susTrip
+
 **SusTrip** is a web application that records users' past trip information and respective carbon footprints. It aims to help users think more carefully about the mode of transportation they wish to take.
 
 ## Inspiration
