@@ -12,10 +12,14 @@ export default defineSchema({
     counter: s.number(),
   }),
   trip: defineTable({
-    from: s.string(),
-    to: s.string(),
+    id: s.number(),
+    date: s.string(),
+    title: s.string(),
+    origin: s.string(),
+    destination: s.string(),
     distance: s.number(),
     mode: s.string(),
+    emission: s.number(),
   }),
   users: defineTable({
     name: s.string(),

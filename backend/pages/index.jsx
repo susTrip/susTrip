@@ -178,7 +178,11 @@ const Home = () => {
               <a>configure</a>
             </Link>
           </li>
-          
+          <li>
+            <Link href="/dashboard">
+              <a>dashboard</a>
+            </Link>
+          </li>
         </ul>
         <body>
               <div id="root"></div>

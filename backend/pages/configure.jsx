@@ -1,4 +1,4 @@
-import Head from 'next/head'
+import * as React from 'react'
 import {
   Card,
   CardContent,
@@ -11,32 +11,59 @@ import {
   Button,
   touchRippleClasses,
 } from '@mui/material'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+
 import { useQuery, useMutation } from '../convex/_generated/react'
 import { useCallback } from 'react'
 import { borderRadius } from '@mui/system'
 
+const trip = {
+  id: 0,
+  date: '',
+  title: '',
+  origin: '',
+  destination: '',
+  distance: 0,
+  mode: '',
+  emission: 0,
+}
+
 export default function App() {
-  const submitTrip = useMutation("submitTrip")
-  const trips = useQuery("trip") || []
+  const [idValue, setIdValue] = React.useState(trip.id)
+  const [dateValue, setDateValue] = React.useState(trip.date)
+  const [titleValue, setTitleValue] = React.useState(trip.title)
+  const [originValue, setOriginValue] = React.useState(trip.origin)
+  const [destinationValue, setDestinationValue] = React.useState(
+    trip.destination
+  )
+  const [distanceValue, setDistanceValue] = React.useState(trip.distance)
+  const [modeValue, setModeValue] = React.useState(trip.mode)
+  const [emissionValue, setEmissionValue] = React.useState(trip.emission)
+
+  const submitTrip = useMutation('submitTrip')
+  const trips = useQuery('trip') || []
   function handleSubmitTrip() {
-    submitTrip("here", "there", 19, "leg")
+    console.log(trip)
+    submitTrip(
+      idValue,
+      dateValue,
+      titleValue,
+      originValue,
+      destinationValue,
+      distanceValue,
+      modeValue,
+      emissionValue,
+    )
   }
   return (
     <Container>
       <Grid>
         <Card>
-          <Box sx={{ paddingTop: 3}}>
+          <Box sx={{ paddingTop: 3 }}>
             <Typography variant="h5" paragraph align="center">
               Configuration Page
             </Typography>
             <CardContent>
-              <Typography
-                variant="body"
-                paragraph
-                sx={{ paddingTop: 3 }}
-              >
+              <Typography variant="body" paragraph sx={{ paddingTop: 3 }}>
                 Default mode of transportation
               </Typography>
               <Autocomplete
@@ -66,13 +93,64 @@ export default function App() {
           </Box>
         </Card>
       </Grid>
-      <input type="text"/> 
-      <button onClick={handleSubmitTrip}>Submit</button>
+      <input
+        type="text"
+        value={idValue}
+        id="logid"
+        onChange={(e) => setIdValue(e.currentTarget.value)}
+      />
+      <input
+        type="text"
+        value={dateValue}
+        id="date"
+        onChange={(e) => setDateValue(e.currentTarget.value)}
+      />
+      <input
+        type="text"
+        value={titleValue}
+        id="title"
+        onChange={(e) => setTitleValue(e.currentTarget.value)}
+      />
+      <input
+        type="text"
+        value={originValue}
+        id="origin"
+        onChange={(e) => setOriginValue(e.currentTarget.value)}
+      />
+      <input
+        type="text"
+        value={destinationValue}
+        id="destination"
+        onChange={(e) => setDestinationValue(e.currentTarget.value)}
+      />
+      <input
+        type="text"
+        value={distanceValue}
+        id="distance"
+        onChange={(e) => setDistanceValue(e.currentTarget.value)}
+      />
+      <input
+        type="text"
+        value={modeValue}
+        id="mode"
+        onChange={(e) => setModeValue(e.currentTarget.value)}
+      />
+      <input
+        type="text"
+        value={emissionValue}
+        id="emission"
+        onChange={(e) => setEmissionValue(e.currentTarget.value)}
+      />
+
+      <Button onClick={handleSubmitTrip} variant="text">
+        Text
+      </Button>
       <ul>
-        {trips.map(t => <div>{t.distance}</div>)}
+        {trips.map((t) => (
+          <div>{t.distance}</div>
+        ))}
       </ul>
     </Container>
-    
   )
 }
 
@@ -83,10 +161,7 @@ const transOptions = [
   { label: 'Amtrak' },
   { label: 'Plane' },
   { label: 'Legs' },
-  { label: 'Horse'},
+  { label: 'Horse' },
 ]
 
-const unitOptions = [
-  { label: 'miles' }, 
-  { label: 'kilometers' },
-]
+const unitOptions = [{ label: 'miles' }, { label: 'kilometers' }]

@@ -1,54 +1,37 @@
+import Head from 'next/head'
 import * as React from 'react'
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
+import Map, { Marker } from 'react-map-gl'
+import {
+  Container,
+  Badge,
+  Divider,
+  List,
+  Grid,
+  Toolbar,
+  CssBaseline,
+  Link,
+  Typography,
+  Box,
+} from '@mui/material/'
 import MuiDrawer from '@mui/material/Drawer'
-import Box from '@mui/material/Box'
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import List from '@mui/material/List'
-import Typography from '@mui/material/Typography'
-import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
-import Badge from '@mui/material/Badge'
-import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
-import Paper from '@mui/material/Paper'
-import Link from '@mui/material/Link'
 import MenuIcon from '@mui/icons-material/Menu'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import NotificationsIcon from '@mui/icons-material/Notifications'
-import { mainListItems, secondaryListItems } from './listItems'
-import Chart from './Charts'
-import Emissions from './Emissions'
-import Trips from './Trips'
+import IconButton from '@mui/material/IconButton'
+import { mainListItems, secondaryListItems } from '../src/components/listItems'
+import 'mapbox-gl/dist/mapbox-gl.css'
+import { useEffect } from 'react'
+import { useRef } from 'react'
 
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-      <Link color="inherit" href="http://localhost:3000">
-        susTrip_PennApps
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  )
-}
-
-const drawerWidth: number = 240
-
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean
-}
+const MAPBOX_TOKEN =
+  'pk.eyJ1Ijoic3VzdHJpcCIsImEiOiJjbDdtMDMzdHUwOXd2M3ZwOG9hN29heXV5In0.Y3_7dFxQF5xjS7WuhtdxiQ'
+const drawerWidth = 240
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
+})(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
@@ -92,12 +75,73 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme()
 
-function DashboardContent() {
+export default function Home() {
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
   }
+  const mapEl = useRef()
+  useEffect(() => {
+    mapboxgl.accessToken = MAPBOX_TOKEN
+    const map = new mapboxgl.Map({
+      container: 'map',
+      // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [-75.1, 40.0],
+      zoom: 8,
+    })
 
+    // const mapboxGeocoder = new MapboxGeocoder({
+    //     accessToken: mapboxgl.accessToken
+    // });
+    const mapboxDirections = new MapboxDirections({
+      accessToken: mapboxgl.accessToken,
+    })
+    mapboxDirections.on('route', (route) => {
+      console.log(route.route)
+      console.log(route.route[0].distance + ' meters')
+      console.log(
+        'start at ' + mapboxDirections.getOrigin().geometry.coordinates
+      )
+      console.log(
+        'end at ' + mapboxDirections.getDestination().geometry.coordinates
+      )
+      // getCoordsName(mapboxDirections.getOrigin().geometry.coordinates,
+      //         mapboxDirections.getDestination().geometry.coordinates);
+    })
+    mapboxDirections.on('profile', (profile) => {
+      console.log('traveling via ' + profile.profile)
+    })
+    map.addControl(mapboxDirections, 'top-left')
+
+    var getCoordsName = function (firstCoords, secondCoords) {
+      // if(firstCoords === undefined || secondCoords === undefined) {
+      //     return 0;
+      // }
+      var xhr = new XMLHttpRequest()
+      var URL =
+        'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
+        firstCoords[0] +
+        ',' +
+        secondCoords[1] +
+        ';' +
+        secondCoords[0] +
+        ',' +
+        secondCoords[1] +
+        '.json?access_token=' +
+        mapboxgl.accessToken
+
+      xhr.open('GET', URL)
+      xhr.responseType = 'json'
+
+      xhr.onload = function () {
+        let responseObj = xhr.response
+        console.log(responseObj)
+        // console.log(responseObj.features[0].place_name); // Hello, world!
+      }
+      xhr.send()
+    }
+  }, [])
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -157,61 +201,20 @@ function DashboardContent() {
             {secondaryListItems}
           </List>
         </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Chart />
-                </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Emissions />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Trips />
-                </Paper>
-              </Grid>
-            </Grid>
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
+
+        <Head>
+          <title>react-map-gl example</title>
+        </Head>
+
+        <Box>
+          <div
+            id="map"
+            style={{ position: 'absolute', top: 65, bottom: 0, width: '100%' }}
+          >
+            there should be a map here
+          </div>
         </Box>
       </Box>
     </ThemeProvider>
   )
-}
-
-export default function Dashboard() {
-  return <DashboardContent />
 }

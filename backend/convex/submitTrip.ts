@@ -1,7 +1,7 @@
 import { mutation } from "./_generated/server";
 
 // Send a chat message.
-export default mutation(({ db }, from: string, to: string, distance: number, mode: string, ) => {
-  const trip = { from, to, distance, mode };
+export default mutation(({ db }, id: number, date: string, title: string, origin: string, destination: string, distance: number, mode: string, emission: number) => {
+  const trip = { id,  date, title, origin, destination, distance, mode, emission };
   db.insert("trip", trip);
 });
