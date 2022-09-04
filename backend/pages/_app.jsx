@@ -12,7 +12,7 @@ const authInfo = convexConfig.authInfo[0];
 function MyApp({ Component, pageProps }) {
   return (
     <ConvexProviderWithAuth0 client={convex} authInfo={authInfo} loggedOut={<Login />}>
-      <App />
+        <Component {...pageProps} />
     </ConvexProviderWithAuth0>
   )
 }

@@ -209,10 +209,33 @@ export default function Home() {
         <Box>
           <div
             id="map"
-            style={{ position: 'absolute', top: 65, bottom: 0, width: '100%' }}
+            style={{
+              position: 'absolute',
+              top: 65,
+              bottom: 350,
+              width: '100%',
+            }}
           >
             there should be a map here
           </div>
+          <Grid sx={{ flexGrow: 1 }} container spacing={2}>
+            <Grid item xs={12}>
+              <Grid container justifyContent="center" spacing={spacing}>
+                {[0, 1, 2].map((value) => (
+                  <Grid key={value} item>
+                    <Paper
+                      sx={{
+                        height: 140,
+                        width: 100,
+                        backgroundColor: (theme) =>
+                          theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+                      }}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </ThemeProvider>
