@@ -14,6 +14,7 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Link from '@mui/material/Link'
+import Button from '@mui/material/Button'
 import MenuIcon from '@mui/icons-material/Menu'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import NotificationsIcon from '@mui/icons-material/Notifications'
@@ -21,6 +22,7 @@ import { mainListItems, secondaryListItems } from './listItems'
 import Chart from './Charts'
 import Emissions from './Emissions'
 import Trips from './Trips'
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Copyright(props: any) {
   return (
@@ -98,7 +100,20 @@ function DashboardContent() {
     setOpen(!open)
   }
 
-
+  function Logout() {
+    const { logout, user } = useAuth0();
+    return (
+      <Grid>
+        {/* We know this component only renders if the user is logged in. */}
+        <Typography>Logged in{user.name ? ` as ${user.name}` : ""}</Typography>
+        <Button size="small" color="secondary" variant="contained"
+          onClick={() => logout({ returnTo: window.location.origin })}
+        >
+          Log out
+        </Button>
+      </Grid>
+    );
+  }
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -130,6 +145,7 @@ function DashboardContent() {
             >
               Your susTrip Dashboard
             </Typography>
+              <Logout/>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />

@@ -13,6 +13,12 @@ import {
   Typography,
   Box,
   Paper,
+  Button,
+  CardContent,
+  Card,
+  CardActions,
+  CardHeader,
+  TextField,
 } from '@mui/material/'
 import MuiDrawer from '@mui/material/Drawer'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
@@ -25,6 +31,7 @@ import { mainListItems, secondaryListItems } from '../src/components/listItems'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { useEffect } from 'react'
 import { useRef } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const MAPBOX_TOKEN =
   'pk.eyJ1Ijoic3VzdHJpcCIsImEiOiJjbDdtMDMzdHUwOXd2M3ZwOG9hN29heXV5In0.Y3_7dFxQF5xjS7WuhtdxiQ'
@@ -76,11 +83,31 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme()
 
+function Logout() {
+  const { logout, user } = useAuth0()
+  return (
+    <Grid>
+      {/* We know this component only renders if the user is logged in. */}
+      <Typography>Logged in{user.name ? ` as ${user.name}` : ''}</Typography>
+      <Button
+        size="small"
+        color="secondary"
+        variant="contained"
+        onClick={() => logout({ returnTo: window.location.origin })}
+      >
+        Log out
+      </Button>
+    </Grid>
+  )
+}
+
 export default function Home() {
+  const [myTrip, setTrip] = React.useState('Your Carbon Free Trip')
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
   }
+  console.log(myTrip)
   const mapEl = useRef()
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_TOKEN
@@ -175,6 +202,7 @@ export default function Home() {
             >
               Your susTrip Dashboard
             </Typography>
+            <Logout />
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
@@ -214,31 +242,97 @@ export default function Home() {
               position: 'absolute',
               top: 65,
               bottom: 350,
-              width: '100%',
+              width: '88%',
+              zIndex: 4,
             }}
           >
             there should be a map here
           </div>
-          <Grid sx={{ flexGrow: 1 }} container spacing={2}>
-            <Grid item xs={12}>
-              <Grid container justifyContent="center">
-                {[0, 1, 2].map((value) => (
-                  <Grid key={value} item>
-                    <Paper
-                      sx={{
-                        height: 140,
-                        width: 100,
-                        backgroundColor: (theme) =>
-                          theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-                      }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-          </Grid>
         </Box>
       </Box>
+      <Container sx={{ position: 'float', paddingTop: 45 }}>
+        <Paper
+          sx={{
+            p: 2,
+            display: 'flex',
+            flexDirection: 'row',
+            height: 260,
+            width: 1400,
+          }}
+        >
+          <Grid sx={{ paddingLeft: 10, paddingRight: 10 }}>
+            <Box variant="outlined">
+              <CardContent>
+                <TextField
+                  label="Trip Title"
+                  color="secondary"
+                  focused
+                  gutterBottom
+                  inputProps={{ maxLength: 20 }}
+                  onChange={(e) => setTrip(e.target.value)}
+                />
+                <Typography
+                  sx={{ fontSize: 16, paddingTop: 2 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Origin:
+                </Typography>
+                <Typography
+                  sx={{ fontSize: 16, paddingTop: 2 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Destination:
+                </Typography>
+                <Typography
+                  sx={{ fontSize: 16, paddingTop: 2 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Mode of Travel:
+                </Typography>
+                {/* <Typography variant="body2">
+        well meaning and kindly.
+        <br />
+        {'"safe travel!"'}
+      </Typography> */}
+              </CardContent>
+            </Box>
+          </Grid>
+          <Grid sx={{ paddingLeft: 30 }}>
+            <Box maxWidth={500} variant="outlined">
+              <CardContent>
+                <Typography variant="h4" component="div" gutterBottom>
+                  {myTrip}
+                </Typography>
+                <Typography
+                  sx={{ fontSize: 18 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Total Distance:
+                </Typography>
+                <Typography
+                  sx={{ fontSize: 18 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Total Carbon emmitted:
+                </Typography>
+                {/* <Typography variant="body2">
+        well meaning and kindly.
+        <br />
+        {'"safe travel!"'}
+      </Typography> */}
+              </CardContent>
+              <CardActions>
+                <Button size="small">Save Trip</Button>
+              </CardActions>
+            </Box>
+          </Grid>
+        </Paper>
+      </Container>
     </ThemeProvider>
   )
 }
