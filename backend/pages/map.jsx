@@ -127,7 +127,6 @@ function calculateCo2ByGram(mode, distance) {
   if (mode == 'mapbox/driving-traffic') rate = 404
   else if (mode == 'mapbox/driving') rate = 300
   else if (mode == 'mapbox/walking') rate = 0
-  console.log(rate)
   if (rate != undefined) {
     return (rate * distance)
   }
@@ -150,7 +149,6 @@ export default function Home() {
   const toggleDrawer = () => {
     setOpen(!open)
   }
-  console.log(myTrip)
   const mapEl = useRef()
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_TOKEN
@@ -199,11 +197,9 @@ export default function Home() {
       }
       setMode(transMap[modeTransport])
 
-      console.log('traveling via ' + profile.profile)
     })
 
     mapboxDirections.on('route', (route) => {
-      console.log(modeTransport)
       var distInMile = parseFloat(route.route[0].distance) * 0.000621371
       var curEmission = calculateCo2ByGram(
         modeTransport,
@@ -249,8 +245,6 @@ export default function Home() {
 
       xhr.onload = function () {
         let responseObj = xhr.response
-        console.log(responseObj)
-        // console.log(responseObj.features[0].place_name); // Hello, world!
       }
       xhr.send()
     }
@@ -267,6 +261,10 @@ export default function Home() {
       mode,
       emission
     )
+    alertHandler()
+  }
+  function alertHandler() {
+    alert("Trip Saved!")
   }
   return (
     <ThemeProvider theme={theme}>
@@ -423,7 +421,7 @@ export default function Home() {
         </Typography> */}
               </CardContent>
               <CardActions>
-                <Button size="small" onClick={handleSubmitTrip}>
+                <Button size="small" onClick= {handleSubmitTrip}>
                   Save Trip
                 </Button>
               </CardActions>
