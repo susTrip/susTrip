@@ -32,6 +32,8 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import { useEffect } from 'react'
 import { useRef } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
+import { useQuery, useMutation } from '../convex/_generated/react'
+
 
 const MAPBOX_TOKEN =
   'pk.eyJ1Ijoic3VzdHJpcCIsImEiOiJjbDdtMDMzdHUwOXd2M3ZwOG9hN29heXV5In0.Y3_7dFxQF5xjS7WuhtdxiQ'
@@ -84,11 +86,10 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme()
 
 function Logout() {
-  const { logout, user } = useAuth0()
+  const { logout } = useAuth0()
   return (
     <Grid>
       {/* We know this component only renders if the user is logged in. */}
-      <Typography>Logged in{user.name ? ` as ${user.name}` : ''}</Typography>
       <Button
         size="small"
         color="secondary"
@@ -101,8 +102,35 @@ function Logout() {
   )
 }
 
+function calculateCo2ByGram(mode, distance) {
+  // const TransportMode = {
+  //   "mapbox/driving-traffic" : 404,
+  //   "Bus" : 150,
+  //   "mapbox/driving" : 300,
+  //   "SEPTA" : 100,
+  //   "Amtrak" : 200,
+  //   "Plane" : 500,
+  //   "mapbox/walking" : 0,
+  //   "Horse" : 50
+  // }
+  var rate
+  if (mode == 'mapbox/driving-traffic') rate = 404
+  else if (mode == 'mapbox/driving') rate = 300
+  else if (mode == 'mapbox/walking') rate = 0
+  console.log(rate)
+  if (rate != undefined) {
+    return rate * distance
+  }
+  return -1
+}
+
 export default function Home() {
   const [myTrip, setTrip] = React.useState('Your Carbon Free Trip')
+  const [origin, setOrigin] = React.useState('')
+  var modeTransport = 'mapbox/driving-traffic'
+
+  const submitTrip = useMutation('submitTrip')
+  const trips = useQuery('trip') || []
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
@@ -125,21 +153,57 @@ export default function Home() {
     const mapboxDirections = new MapboxDirections({
       accessToken: mapboxgl.accessToken,
     })
+
+    // enum TransportMode {
+    //   Car,
+    //   Bus,
+    //   SEPTA,
+    //   Amtrak,
+    //   Plane,
+    //   Legs,
+    //   Horse
+    // }
+
+    // var TransportModeEmission = new Map<TransportMode, number>([
+    //   [TransportMode.Car, 404],
+    //   [TransportMode.Bus, 150],
+    //   [TransportMode.SEPTA, 100],
+    //   [TransportMode.Amtrak, 200],
+    //   [TransportMode.Plane, 500],
+    //   [TransportMode.Legs, 0],
+    //   [TransportMode.Horse, 50]
+    // ]);
+
+    mapboxDirections.on('profile', (profile) => {
+      modeTransport = profile.profile
+      console.log('traveling via ' + profile.profile)
+    })
+
     mapboxDirections.on('route', (route) => {
       console.log(route.route)
       console.log(route.route[0].distance + ' meters')
-      console.log(
-        'start at ' + mapboxDirections.getOrigin().geometry.coordinates
-      )
+      console.log('start at ' + mapboxDirections.getOrigin())
       console.log(
         'end at ' + mapboxDirections.getDestination().geometry.coordinates
       )
+      var date = new Date()
+      console.log(modeTransport)
+      var emission = calculateCo2ByGram(modeTransport, route.route[0].distance)
+      submitTrip(
+        0,
+        date.toDateString(),
+        'titleValue',
+        mapboxDirections.getOrigin().geometry.coordinates,
+        mapboxDirections.getDestination().geometry.coordinates,
+        route.route[0].distance,
+        modeTransport,
+        emission
+      )
+
       // getCoordsName(mapboxDirections.getOrigin().geometry.coordinates,
       //         mapboxDirections.getDestination().geometry.coordinates);
     })
-    mapboxDirections.on('profile', (profile) => {
-      console.log('traveling via ' + profile.profile)
-    })
+
     map.addControl(mapboxDirections, 'top-left')
 
     var getCoordsName = function (firstCoords, secondCoords) {
@@ -276,7 +340,7 @@ export default function Home() {
                   color="text.secondary"
                   gutterBottom
                 >
-                  Origin:
+                  Origin: {origin}
                 </Typography>
                 <Typography
                   sx={{ fontSize: 16, paddingTop: 2 }}
@@ -293,10 +357,10 @@ export default function Home() {
                   Mode of Travel:
                 </Typography>
                 {/* <Typography variant="body2">
-        well meaning and kindly.
-        <br />
-        {'"safe travel!"'}
-      </Typography> */}
+          well meaning and kindly.
+          <br />
+          {'"safe travel!"'}
+        </Typography> */}
               </CardContent>
             </Box>
           </Grid>
@@ -321,10 +385,10 @@ export default function Home() {
                   Total Carbon emmitted:
                 </Typography>
                 {/* <Typography variant="body2">
-        well meaning and kindly.
-        <br />
-        {'"safe travel!"'}
-      </Typography> */}
+          well meaning and kindly.
+          <br />
+          {'"safe travel!"'}
+        </Typography> */}
               </CardContent>
               <CardActions>
                 <Button size="small">Save Trip</Button>

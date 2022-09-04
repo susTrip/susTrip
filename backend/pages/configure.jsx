@@ -42,7 +42,6 @@ export default function App() {
   const submitTrip = useMutation('submitTrip')
   const trips = useQuery('trip') || []
   function handleSubmitTrip() {
-    console.log(trip)
     submitTrip(
       idValue,
       dateValue,

@@ -24,6 +24,7 @@ import Emissions from './Emissions'
 import Trips from './Trips'
 import dynamic from 'next/dynamic'
 import { useAuth0 } from "@auth0/auth0-react";
+import Logout from "../../pages/index"
 
 
 const DynamicShape = dynamic(() => import('../components/Charts'), {
@@ -108,11 +109,10 @@ function DashboardContent() {
   }
 
 function Logout() {
-  const { logout, user } = useAuth0();
+  const { logout } = useAuth0();
   return (
     <Grid>
       {/* We know this component only renders if the user is logged in. */}
-      <Typography>Logged in{user.name ? ` as ${user.name}` : ""}</Typography>
       <Button size="small" color="secondary" variant="contained"
         onClick={() => logout({ returnTo: window.location.origin })}
       >
